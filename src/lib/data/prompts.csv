@@ -1,0 +1,39 @@
+prompt, category, subcategory, component,  operation, prop, demo, altcomponent
+How many sites do I have?, sites, none, card, numSites.length, none, true, timeline.createdOn
+Do I have a site called shadcn, sites, displayName, list, displayName.includes, shadcn, true, none
+List all sites that have demo in their name, sites, displayName, list, displayName.includes, demo, false, 
+Find sites with the same name, sites, displayName, list, displayName.unique, none, false
+Can you show me how the subminima site looks like, sites, previewUrl, image, displayName.includes, subminima, true
+What is the timezone for subminima.webflow.io, sites, timeZone, card, shortName.includes, subminima, false
+Do I have a website with a url with the word design, sites, shortName, list, shortName.includes, design, true
+Search for sites with "oredeo" in the url, sites, shortName, list, shortName.includes, oredeo, false
+Show me a preview for shadcn.webflow,  sites, previewUrl, image, shortName.includes, shadcn, true
+When was subminima created?, sites, createdOn, card, displayName.includes, subminima, true
+List all websites created this month, sites, createdOn, list, createdOn.month, current, true
+Get all websites created today, sites, createdOn, list, createdOn.day, today, false
+find if shadcn was created yesterday, sites, createdOn, card, displayName.includes, shadcn, false
+How many websites were created in march, sites, createdOn, card, createdOn.month, march, false
+did I publish the myo site today?, sites, lastPublished, card, displayName.includes, myo, false
+was any site published today?, sites, lastPublished, list, lastPublished.day, today, true
+has shadcn been deployed? , sites, lastPublished, card, displayName.includes, shadcn, true
+any new sites published this year?, sites, lastPublished, list, lastPublished.year, current, true
+Are new updates on shadcn online?, sites, lastPublished, list,  displayName.includes, shadcn, true
+what was the publication date for subminima.webflow.io, sites, lastPublished, card,  shortName.includes, subminima, true
+have I updated any sites, sites, lastUpdated, list, none,none, true
+when did I last touch shadcn, sites, lastUpdated, card, displayName.includes, shadcn, true
+list all pages in the shadcn website, pages, title, list, siteId.includes, shadcn, true
+list all pages in the products collection, pages, title, list, collectionId.includes, products, true
+any page with the title something like guide, pages, title, card, title.includes, guide, true
+*is there an events page available on shadcn website, pages, title, card, title.siteId.includes, events.shadcn, true
+how many pages are collection pages, pages, title, list, !collection.equals, null, true,
+what is the url of the events page?, pages, slug, card, title.includes, events,  true
+when was the homepage created?, pages, createdOn, card, title.includes, homepage, true
+did the home page get developed,  pages, lastUpdated, card, title.includes, home, true
+get all pages that haven't been archived, pages, archived, list, archived.eqauls, true, true
+How many drafts do I have, pages, draft, list, draft.equals, true, true
+find all pages that I can branch, pages, canBranch, list, canBranch.equals, true, true
+get the seo title for the home page,  pages, seo.title, card, title.includes, home, true
+*get details for page descibed as galaxy information, pages, seo.description, card,  seo.description.includes, galaxy information, true
+what is the open graph description for home page, pages, openGraph.description, card, title.includes, home, true
+the open graph title of the page is components, pages, openGraph.title, card, openGraph.title.includes, components, true
+
