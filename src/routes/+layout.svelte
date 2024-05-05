@@ -16,7 +16,6 @@
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { myStore, promptStore, userStore } from '$lib/stores/store';
 	import { MessageSquare, UserCog } from 'lucide-svelte';
-	import { toggleMode } from 'mode-watcher';
 	import { WEBFLOW_CLIENT_ID } from '$lib/data/credentials';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -70,6 +69,8 @@
 			</div>
 			<div class="flex-1">
 				<nav class="grid items-start px-2 text-sm font-medium lg:px-4">
+					<h3 class="my-2">Chat History ({prompt_history.length})</h3>
+
 					{#each prompt_history as prompt}
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -104,7 +105,7 @@
 	</div>
 	<div class="flex flex-col">
 		<header
-			class="flex h-14 items-center justify-between gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6"
+			class="flex h-14 items-center justify-between border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6"
 		>
 			<Sheet.Root>
 				<Sheet.Trigger let:builder>
@@ -119,6 +120,7 @@
 							<Package2 class="h-6 w-6"></Package2>
 							<span class="sr-only">Super User</span>
 						</a>
+						<h3 class="my-2">Chat History ({prompt_history.length})</h3>
 						{#each prompt_history as prompt}
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -148,32 +150,38 @@
 					</div>
 				</Sheet.Content>
 			</Sheet.Root>
-			<div></div>
 
-			<div class="flex gap-4">
-				<Button on:click={toggleMode} variant="outline" size="icon">
-					<Sun
-						class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-					></Sun>
-					<Moon
-						class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-					></Moon>
-					<span class="sr-only">Toggle theme</span>
-				</Button>
+			<div class="flex w-full items-center justify-between gap-4">
+				<div class="flex items-center gap-1">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-check-check stroke-muted-foreground"
+						><path d="M18 6 7 17l-5-5" /><path d="m22 10-7.5 7.5L13 16" /></svg
+					>
+					<div class="text-sm text-muted-foreground">Imported 8 sites and 33 pages</div>
+				</div>
 
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger let:builder>
+					<DropdownMenu.Trigger asChild let:builder>
 						<Button builders={[builder]} variant="secondary" size="icon" class="rounded-full">
-							<CircleUser class="h-5 w-5"></CircleUser>
+							<CircleUser class="h-5 w-5" />
 							<span class="sr-only">Toggle user menu</span>
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
-						<DropdownMenu.Separator></DropdownMenu.Separator>
+						<DropdownMenu.Separator />
 						<DropdownMenu.Item>Settings</DropdownMenu.Item>
 						<DropdownMenu.Item>Support</DropdownMenu.Item>
-						<DropdownMenu.Separator></DropdownMenu.Separator>
+						<DropdownMenu.Separator />
 						<DropdownMenu.Item>Logout</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
