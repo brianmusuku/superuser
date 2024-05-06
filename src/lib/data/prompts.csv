@@ -36,4 +36,12 @@ get the seo title for the home page,  pages, seo.title, card, title.includes, ho
 *get details for page descibed as galaxy information, pages, seo.description, card,  seo.description.includes, galaxy information, true
 what is the open graph description for home page, pages, openGraph.description, card, title.includes, home, true
 the open graph title of the page is components, pages, openGraph.title, card, openGraph.title.includes, components, true
-
+notify me any time a user submits a form with 1000 credits, webhooks, form, credit-form, credits.equals, 1000, true
+tell me when a user signs up, webhooks, form, signup-form, name.equals, signup, true
+i should receive alerts when anyone subscibes to my newsletter, webhooks, form, subscription-form, name.equals, newsletter, true
+if anyone orders more than 10 shoes then text me, webhooks, form, order-form, shoes.greaterThan, 10, true
+if anyone from russia signs up contact me, webhooks, form, signup-form, country.equals, russia, true
+look out for people born after 2000, webhooks, form, signup-form, date.greaterThan, 2000, true
+if anyone logs in with a gmail address, webhooks, form, login-form, email.includes, gmail, true
+tell me when brian schedules a meeting, webhooks, form, appointment-form, name.includes, brian, true
+alert me if someone books a 9.30 appointment, webhooks, form, appointement-form, time.includes, 9.30, true
