@@ -52,7 +52,6 @@ export const getWeflowSites = async (WEBFLOW_TOKEN: string) => {
 
 	const resp = await fetch(url, options);
 	const data = await resp.json();
-	console.log(data);
 	return data;
 };
 
