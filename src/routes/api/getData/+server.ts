@@ -172,6 +172,8 @@ const getSiteInfo = async (prompt: string, webflow_acess_token: string) => {
 	return json({ info: mappedSite, response: llm_response });
 };
 
+const getInstructionInfo = (prompt: string, webflow_acess_token: string) => {};
+
 export async function POST({ request }: { request: Request }) {
 	const {
 		prompt,
@@ -179,7 +181,11 @@ export async function POST({ request }: { request: Request }) {
 		webflow_acess_token
 	}: { prompt: string; site_id: string; webflow_acess_token: string } = await request.json();
 
-	const choices = ['site', 'page'];
+	const choices = [
+		'question about a site',
+		'question about a page',
+		'instruction when something happens'
+	];
 	const siteOrPagePredictions = await querySimilarity({
 		inputs: {
 			source_sentence: prompt.toLowerCase(),
@@ -190,8 +196,7 @@ export async function POST({ request }: { request: Request }) {
 	const sortedPredictions: string[] = sortStringsByFloats(choices, siteOrPagePredictions);
 	const chosenTopic = sortedPredictions[0];
 
-	if (chosenTopic === 'page') return getPageInfo(prompt, site_id, webflow_acess_token);
-	else {
-		return getSiteInfo(prompt, webflow_acess_token);
-	}
+	if (chosenTopic.includes('page')) return getPageInfo(prompt, site_id, webflow_acess_token);
+	if (chosenTopic.includes('site')) return getSiteInfo(prompt, webflow_acess_token);
+	if (chosenTopic.includes('instruction')) return getInstructionInfo(prompt, webflow_acess_token);
 }

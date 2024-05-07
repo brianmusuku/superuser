@@ -98,5 +98,6 @@ export const suggestions: string[] = [
 	'Are the new updates on shadcn online?',
 	'List all pages in the shadcn website.',
 	'List all pages in the events collection',
-	'how many pages are collection pages in shadcn'
+	'how many pages are collection pages in shadcn',
+	'tell me when brian schedules a meeting'
 ];
