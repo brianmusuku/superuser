@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 
-export const myStore = writable({ prompt_history: [''] });
+const prompt_history: string[] = [];
+export const myStore = writable({ prompt_history });
 
 export const promptStore = writable({ currentPrompt: '' });
 
