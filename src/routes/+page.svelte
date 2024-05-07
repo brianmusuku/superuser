@@ -126,18 +126,26 @@
 						<Package2 class="h-6 w-6"></Package2>
 						<span class="sr-only">Super User</span>
 					</a>
-					<h3 class="my-2">Chat History ({prompt_history.length})</h3>
-					{#each prompt_history as prompt}
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<!-- svelte-ignore a11y-no-static-element-interactions -->
-						<!-- svelte-ignore a11y-missing-attribute -->
-						<a
-							class="flex cursor-pointer items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-						>
-							<MessageSquare class="h-4 w-4"></MessageSquare>
-							{prompt.slice(0, 27).trim()}...
-						</a>
-					{/each}
+					<div class="flex h-full flex-col justify-between">
+						<div>
+							<h3 class="my-2">Chat History ({prompt_history.length})</h3>
+							{#each prompt_history as prompt}
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<!-- svelte-ignore a11y-no-static-element-interactions -->
+								<!-- svelte-ignore a11y-missing-attribute -->
+								<a
+									class="flex cursor-pointer items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+								>
+									<MessageSquare class="h-4 w-4"></MessageSquare>
+									{prompt.slice(0, 27).trim()}...
+								</a>
+							{/each}
+						</div>
+
+						<div>
+							<h3 class="my-2">Automations (0)</h3>
+						</div>
+					</div>
 				</nav>
 				<div class="mt-auto">
 					<Card.Root>

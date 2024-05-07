@@ -62,20 +62,27 @@
 			</div>
 			<div class="flex-1">
 				<nav class="grid items-start px-2 text-sm font-medium lg:px-4">
-					<h3 class="my-2">Chat History ({prompt_history.length})</h3>
+					<div class="flex h-full flex-col justify-between">
+						<div>
+							<h3 class="my-2">Chat History ({prompt_history.length})</h3>
+							{#each prompt_history as prompt}
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<!-- svelte-ignore a11y-no-static-element-interactions -->
+								<!-- svelte-ignore a11y-missing-attribute -->
+								<a
+									on:click={() => handleHistoryClick(prompt)}
+									class="flex cursor-pointer items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+								>
+									<MessageSquare class="h-4 w-4"></MessageSquare>
+									{prompt.slice(0, 27).trim()}...
+								</a>
+							{/each}
+						</div>
 
-					{#each prompt_history as prompt}
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<!-- svelte-ignore a11y-no-static-element-interactions -->
-						<!-- svelte-ignore a11y-missing-attribute -->
-						<a
-							on:click={() => handleHistoryClick(prompt)}
-							class="flex cursor-pointer items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-						>
-							<MessageSquare class="h-4 w-4"></MessageSquare>
-							{prompt.slice(0, 27).trim()}...
-						</a>
-					{/each}
+						<div>
+							<h3 class="my-2">Automations (0)</h3>
+						</div>
+					</div>
 				</nav>
 			</div>
 			<div class="mt-auto p-4">
