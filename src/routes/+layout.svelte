@@ -80,7 +80,7 @@
 						</div>
 
 						<div>
-							<h3 class="my-2">Automations (0)</h3>
+							<h3 class="my-2">WatchList (0)</h3>
 						</div>
 					</div>
 				</nav>

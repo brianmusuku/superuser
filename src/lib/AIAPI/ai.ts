@@ -1,3 +1,4 @@
+import { GROQ_KEY } from '$lib/data/credentials';
 import { getReadableDateTime } from '$lib/utils/timeutils';
 
 const ANTHROPIC_API_KEY =
@@ -40,13 +41,13 @@ export const querySimilarity = async (data: {
  * return all webflow sites
  * @returns
  */
-export const getWeflowSites = async (WEBFLOW_TOKEN: string) => {
+export const getWeflowSites = async (webflow_token: string) => {
 	const url = 'https://api.webflow.com/beta/sites';
 	const options = {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
-			authorization: 'Bearer ' + WEBFLOW_TOKEN
+			authorization: 'Bearer ' + webflow_token
 		}
 	};
 
@@ -60,8 +61,8 @@ export const getWeflowSites = async (WEBFLOW_TOKEN: string) => {
  * @param prompt
  * @returns
  */
-export const getSitesInPrompt = async (prompt: string, WEBFLOW_TOKEN: string) => {
-	const { sites } = (await getWeflowSites(WEBFLOW_TOKEN)) as sites;
+export const getSitesInPrompt = async (prompt: string, webflow_token: string) => {
+	const { sites } = (await getWeflowSites(webflow_token)) as sites;
 
 	const foundSites = sites.filter((site: { displayName: string; shortName: string }) => {
 		return (
@@ -77,13 +78,13 @@ export const getSitesInPrompt = async (prompt: string, WEBFLOW_TOKEN: string) =>
  * get all webflow page names
  * @returns
  */
-export const getWeflowPages = async (site_id: string, WEBFLOW_TOKEN: string) => {
+export const getWeflowPages = async (site_id: string, webflow_token: string) => {
 	const url = `https://api.webflow.com/beta/sites/${site_id}/pages`;
 	const options = {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
-			authorization: 'Bearer ' + WEBFLOW_TOKEN
+			authorization: 'Bearer ' + webflow_token
 		}
 	};
 
@@ -97,8 +98,8 @@ export const getWeflowPages = async (site_id: string, WEBFLOW_TOKEN: string) => 
  * @param prompt
  * @returns
  */
-export const getPagesInPrompt = async (site_id: string, prompt: string, WEBFLOW_TOKEN: string) => {
-	const { pages } = (await getWeflowPages(site_id, WEBFLOW_TOKEN)) as pages;
+export const getPagesInPrompt = async (site_id: string, prompt: string, webflow_token: string) => {
+	const { pages } = (await getWeflowPages(site_id, webflow_token)) as pages;
 
 	const foundPages = pages.filter((page: { title: string }) => {
 		return prompt.toLowerCase().includes(page.title.toLowerCase());
@@ -110,14 +111,14 @@ export const getPagesInPrompt = async (site_id: string, prompt: string, WEBFLOW_
 export const getCollectionInPrompt = async (
 	site_id: string,
 	prompt: string,
-	WEBFLOW_TOKEN: string
+	webflow_token: string
 ) => {
 	const url = `https://api.webflow.com/beta/sites/${site_id}/collections`;
 	const options = {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
-			authorization: 'Bearer ' + WEBFLOW_TOKEN
+			authorization: 'Bearer ' + webflow_token
 		}
 	};
 
@@ -138,18 +139,38 @@ export const getCollectionInPrompt = async (
  * @returns
  */
 
-export const getEmail = async (WEBFLOW_TOKEN: string) => {
+export const getEmail = async (webflow_token: string) => {
 	const url = 'https://api.webflow.com/v2/token/authorized_by';
 	const options = {
 		method: 'GET',
 		headers: {
 			accept: 'application/json',
-			authorization: 'Bearer ' + WEBFLOW_TOKEN
+			authorization: 'Bearer ' + webflow_token
 		}
 	};
 
 	const resp = await fetch(url, options);
 
+	return resp.json();
+};
+
+/**
+ * Create a webhook for forms
+ */
+
+export const createWebhook = async (siteId: string, webflow_token: string) => {
+	const endpoint = `https://api.webflow.com/v2/sites/${siteId}/webhooks`;
+	const resp = await fetch(endpoint, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			authorization: 'Bearer ' + webflow_token
+		},
+		body: JSON.stringify({
+			triggerType: 'form_submission'
+		})
+	});
 	return resp.json();
 };
 
@@ -178,8 +199,9 @@ export const getNaturalLangugageAnswer = async (
 	console.log(prompt);
 
 	const requestBody = {
-		model: 'claude-3-sonnet-20240229', //'claude-3-haiku-20240307',
+		model: 'claude-3-haiku-20240307', //'claude-3-sonnet-20240229',
 		max_tokens: 1024,
+		temperature: 0.0,
 		messages: [{ role: 'user', content: prompt }]
 	};
 
@@ -197,4 +219,67 @@ export const getNaturalLangugageAnswer = async (
 	const { content }: { content: { text: string }[] } = await res.json();
 	if (content) return content[0].text;
 	return '';
+};
+
+/**
+ * Get natural language response given structured results.
+ * @param user_question
+ * @param info_results
+ * @returns
+ */
+
+export const getNaturalLangugageAnswer_ = async (
+	user_question: string,
+	info_results: { [key: string]: string }[]
+) => {
+	const currentDate = new Date();
+	const dateString = "Today's date is " + getReadableDateTime(currentDate.toString());
+	let info = `${dateString}.\n${info_results.length} pages/sites found.\n`;
+
+	info_results.forEach((resultObj) => {
+		for (const key in resultObj) {
+			if (key !== 'timeFilterPassed' && key !== 'id') info += key + ' is ' + resultObj[key] + '. ';
+		}
+		info += ' \n';
+	});
+	const prompt = `Use the supporting info below to answer the user question below. Be terse an correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
+	console.log(prompt);
+
+	const requestBody = {
+		model: 'llama3-8b-8192',
+		messages: [{ role: 'user', content: prompt }]
+	};
+
+	const requestOptions = {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${GROQ_KEY}`,
+			'content-type': 'application/json'
+		},
+		body: JSON.stringify(requestBody)
+	};
+
+	const res = await fetch('https://api.groq.com/openai/v1/chat/completions', requestOptions);
+	const chat_completions: { choices: { message: { content: string } }[] } = await res.json();
+	return chat_completions.choices[0].message.content;
+};
+
+export const addWebhook = async (prompt: string, wf_site_id: string, su_site_id: string) => {
+	const requestBody = {
+		model: 'llama3-8b-8192',
+		messages: [{ role: 'user', content: prompt }]
+	};
+
+	const requestOptions = {
+		method: 'POST',
+		headers: {
+			Authorization: `Bearer ${GROQ_KEY}`,
+			'content-type': 'application/json'
+		},
+		body: JSON.stringify(requestBody)
+	};
+
+	const res = await fetch('https://api.groq.com/openai/v1/chat/completions', requestOptions);
+	const chat_completions: { choices: { message: { content: string } }[] } = await res.json();
+	return chat_completions.choices[0].message.content;
 };

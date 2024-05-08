@@ -172,7 +172,11 @@ const getSiteInfo = async (prompt: string, webflow_acess_token: string) => {
 	return json({ info: mappedSite, response: llm_response });
 };
 
-const getInstructionInfo = (prompt: string, webflow_acess_token: string) => {};
+const getInstructionInfo = async (prompt: string, webflow_access_token: string) => {
+	const data = { prompt, webflow_access_token };
+	data.prompt;
+	return json({ type: 'webhook' });
+};
 
 export async function POST({ request }: { request: Request }) {
 	const {
@@ -186,6 +190,7 @@ export async function POST({ request }: { request: Request }) {
 		'question about a page',
 		'instruction when something happens'
 	];
+
 	const siteOrPagePredictions = await querySimilarity({
 		inputs: {
 			source_sentence: prompt.toLowerCase(),

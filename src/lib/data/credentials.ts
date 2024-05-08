@@ -2,3 +2,5 @@ export const WEBFLOW_CLIENT_ID = '8b5f53c1f71a13a92a1da6c43c93791bca3718a5e69ac7
 export const WEBFLOW_TOKEN = 'fa28f157a3d4962f78f4afa75ae0b68a4aab17c31d5b39d670b40294fc468aae';
 export const WEBFLOW_CLIENT_SECRET =
 	'1dfcc6ee4a12a9e6e5bd06880e2dfe8c5162a99103e11f0593711d161b39ff49';
+
+export const GROQ_KEY = `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`;
