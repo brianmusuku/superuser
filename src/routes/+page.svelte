@@ -184,22 +184,62 @@
 				</div>
 			</div>
 
-			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="secondary" size="icon" class="rounded-full">
-						<CircleUser class="h-5 w-5" />
-						<span class="sr-only">Toggle user menu</span>
-					</Button>
-				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="end">
-					<DropdownMenu.Label>{data.user.firstName} {data.user.lastName}</DropdownMenu.Label>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item>Settings</DropdownMenu.Item>
-					<DropdownMenu.Item>Support</DropdownMenu.Item>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item>Logout</DropdownMenu.Item>
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
+			<div class="flex gap-4">
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger asChild let:builder>
+						<Button
+							builders={[builder]}
+							variant="secondary"
+							size="icon"
+							class="rounded-full bg-muted/40"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="22"
+								height="22"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								class="lucide lucide-bell-dot"
+								><path
+									d="M19.4 14.9C20.2 16.4 21 17 21 17H3s3-2 3-9c0-3.3 2.7-6 6-6 .7 0 1.3.1 1.9.3"
+								/>
+								<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+								<circle cx="18" cy="8" r="3" class="fill-blue-500 stroke-blue-500" /></svg
+							>
+							<span class="sr-only">Toggle user menu</span>
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end">
+						<DropdownMenu.Label>{data.user.firstName} {data.user.lastName}</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item>Settings</DropdownMenu.Item>
+						<DropdownMenu.Item>Support</DropdownMenu.Item>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item>Logout</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger asChild let:builder>
+						<Button builders={[builder]} variant="secondary" size="icon" class="rounded-full">
+							<CircleUser class="h-5 w-5" />
+							<span class="sr-only">Toggle user menu</span>
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end">
+						<DropdownMenu.Label>{data.user.firstName} {data.user.lastName}</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item>Settings</DropdownMenu.Item>
+						<DropdownMenu.Item>Support</DropdownMenu.Item>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item>Logout</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			</div>
 		</div>
 	</header>
 	<main class="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
