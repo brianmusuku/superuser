@@ -5,7 +5,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 
 	import { createEventDispatcher } from 'svelte';
-	import { webhookDataStore } from '$lib/stores/store';
+	import { webhookDataStore, userStore } from '$lib/stores/store';
 	export let user_email: string;
 	export let prompt: string;
 	export let sites: Array<any>;
@@ -13,6 +13,7 @@
 	const dispatch = createEventDispatcher();
 	let site_id = '';
 	let DeployState = 'Deploy';
+	let webflow_acess_token = $userStore.access_token;
 
 	const sitenames = sites.map((site) => {
 		return {
@@ -32,7 +33,7 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ prompt, site_id, user_email })
+			body: JSON.stringify({ prompt, site_id, user_email, webflow_acess_token })
 		});
 
 		const answer = (await res.json()) as { id: string };

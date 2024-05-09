@@ -101,3 +101,5 @@ export const suggestions: string[] = [
 	'how many pages are collection pages in shadcn',
 	'tell me when brian schedules a meeting'
 ];
+
+export const DOMAIN = `https://superuser-422.pages.dev`;
