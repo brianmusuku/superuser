@@ -75,7 +75,7 @@ const getPageInfo = async (prompt: string, site_id: string, webflow_acess_token:
 	if (pageData.length === 1) {
 		return json([
 			[
-				API_NAMES_MAPPER[chosenPageProp] + ': ' + pageData[0][API_NAMES_MAPPER[chosenPageProp]],
+				PAGE_MAPPER[chosenPageProp] + ': ' + pageData[0][PAGE_MAPPER[chosenPageProp]],
 				pageData[0]['Page name'],
 				pageData[0]['Page Url'],
 				llm_response,

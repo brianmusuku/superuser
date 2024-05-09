@@ -33,7 +33,7 @@ export const PAGE_API_DESCRIPTIONS = {
 export const PAGE_MAPPER: { [key: string]: string } = {
 	id: 'Id',
 	siteId: 'Site Id',
-	collectionId: 'CMS or collection',
+	collectionId: 'CMS / collection',
 	title: 'Title',
 	slug: 'Page URL',
 	createdOn: 'Date created',
