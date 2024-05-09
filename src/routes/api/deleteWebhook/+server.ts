@@ -14,7 +14,7 @@ const deleteWebhook = async (webhookId: string) => {
 	};
 
 	const res = await fetch(
-		'https://x8ki-letl-twmt.n7.xano.io/api:pQj0cpV4/superuser_webhooks',
+		'https://x8ki-letl-twmt.n7.xano.io/api:pQj0cpV4/superuser_webhooks/' + webhookId,
 		requestOptions
 	);
 
@@ -23,6 +23,7 @@ const deleteWebhook = async (webhookId: string) => {
 
 export async function POST({ request }: { request: Request }) {
 	const { id }: { id: string } = await request.json();
+
 	const data = await deleteWebhook(id);
 	return json(data);
 }
