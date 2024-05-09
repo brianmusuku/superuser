@@ -266,20 +266,23 @@ export const getNaturalLangugageAnswer_ = async (
 
 export const addWebhook = async (prompt: string, wf_site_id: string, su_site_id: string) => {
 	const requestBody = {
-		model: 'llama3-8b-8192',
-		messages: [{ role: 'user', content: prompt }]
+		urlId: su_site_id,
+		prompText: prompt,
+		webflowSiteId: wf_site_id
 	};
 
 	const requestOptions = {
 		method: 'POST',
 		headers: {
-			Authorization: `Bearer ${GROQ_KEY}`,
 			'content-type': 'application/json'
 		},
 		body: JSON.stringify(requestBody)
 	};
 
-	const res = await fetch('https://api.groq.com/openai/v1/chat/completions', requestOptions);
-	const chat_completions: { choices: { message: { content: string } }[] } = await res.json();
-	return chat_completions.choices[0].message.content;
+	const res = await fetch(
+		'https://x8ki-letl-twmt.n7.xano.io/api:pQj0cpV4/superuser_webhooks',
+		requestOptions
+	);
+
+	return await res.json();
 };

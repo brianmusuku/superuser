@@ -113,7 +113,7 @@
 				<nav class="grid gap-2 text-lg font-medium">
 					<a href="##" class="flex items-center gap-2 text-lg font-semibold">
 						<Package2 class="h-6 w-6"></Package2>
-						<span class="sr-only">Super User</span>
+						<span class="sr-only"><span class="text-blue-500">Super</span> User</span>
 					</a>
 					<div class="flex h-full flex-col justify-between">
 						<div>
@@ -252,7 +252,7 @@
 									<X class="h-4 w-4 " />
 								</div>
 							</div>
-							<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
+							<div class="flex flex-row items-center justify-between space-y-0 px-6 pb-2">
 								<div>
 									<!-- <h3 class="text-sm tracking-tight">
 									{ai_answer[0][0].split(':')[0]}
@@ -289,7 +289,7 @@
 									<X class="h-4 w-4 " />
 								</div>
 							</div>
-							<div class="flex flex-col space-y-1.5 py-6">
+							<div class="flex flex-col space-y-1.5 pb-6">
 								<h3 class="font-semibold leading-none tracking-tight">SuperUser AI</h3>
 								<div class="mt-4 flex items-center gap-1">
 									<MessageSquareQuote class="h-4 min-w-[4%] text-muted-foreground" />
