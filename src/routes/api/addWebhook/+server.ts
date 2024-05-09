@@ -60,11 +60,11 @@ const deploywebHook = async (wf_site_id: string, uri: string, webflow_acess_toke
 			},
 			body: JSON.stringify({
 				triggerType: 'form_submission',
-				uri: DOMAIN + '/api/webhook/' + uri
+				url: DOMAIN + '/api/webhook/' + uri
 			})
 		};
 		const response = await fetch(endpoint, requestOptions_);
-		return await response.json();
+		await response.json();
 	}
 };
 
@@ -76,7 +76,7 @@ export async function POST({ request }: { request: Request }) {
 		webflow_acess_token: string;
 	}
 
-	const uri = crypto.randomUUID();
+	const uri = crypto.randomUUID().replace(/-/g, '');
 	const { site_id, prompt, user_email, webflow_acess_token } = (await request.json()) as userData;
 
 	const data = await addWebhook(prompt, site_id, uri, user_email);
