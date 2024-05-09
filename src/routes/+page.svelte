@@ -74,8 +74,6 @@
 			}
 
 			isLoading = true;
-			prompt_history.push(prompt);
-			myStore.set({ prompt_history });
 
 			const res = await fetch('/api/getData', {
 				method: 'POST',
@@ -86,6 +84,12 @@
 			});
 
 			ai_answer = await res.json();
+
+			if (ai_answer.type !== 'webhook') {
+				prompt_history.push(prompt);
+				myStore.set({ prompt_history });
+			}
+
 			await invalidateAll();
 
 			isLoading = false;
