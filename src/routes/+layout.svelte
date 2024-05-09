@@ -53,7 +53,7 @@
 			<div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
 				<a href="/" class="flex items-center gap-2 font-semibold">
 					<UserCog class="h-5 w-5"></UserCog>
-					<span>SuperUser</span>
+					<span><span class="text-blue-500">Super</span>User</span>
 				</a>
 				<!-- <Button variant="outline" size="icon" class="ml-auto h-8 w-8">
 					<Save class="h-4 w-4" />
@@ -96,7 +96,7 @@
 					</Card.Header>
 					<Card.Content class="p-2 pt-0 md:p-4 md:pt-0">
 						<a href="https://x.com/autoinvent" target="_blank"
-							><Button size="sm" class="w-full">Contact</Button></a
+							><Button size="sm" class="w-full bg-blue-500">Contact</Button></a
 						>
 					</Card.Content>
 				</Card.Root>
