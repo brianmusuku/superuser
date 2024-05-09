@@ -1,4 +1,3 @@
-//import { WEBFLOW_TOKEN } from '$lib/data/constants';
 import { json } from '@sveltejs/kit';
 
 export async function POST({ request }: { request: Request }) {

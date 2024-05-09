@@ -263,26 +263,3 @@ export const getNaturalLangugageAnswer_ = async (
 	const chat_completions: { choices: { message: { content: string } }[] } = await res.json();
 	return chat_completions.choices[0].message.content;
 };
-
-export const addWebhook = async (prompt: string, wf_site_id: string, su_site_id: string) => {
-	const requestBody = {
-		urlId: su_site_id,
-		prompText: prompt,
-		webflowSiteId: wf_site_id
-	};
-
-	const requestOptions = {
-		method: 'POST',
-		headers: {
-			'content-type': 'application/json'
-		},
-		body: JSON.stringify(requestBody)
-	};
-
-	const res = await fetch(
-		'https://x8ki-letl-twmt.n7.xano.io/api:pQj0cpV4/superuser_webhooks',
-		requestOptions
-	);
-
-	return await res.json();
-};

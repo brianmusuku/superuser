@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Loader, MessageSquare, MessageSquareQuote, Search, X } from 'lucide-svelte';
+	import { Clock, Loader, MessageSquare, MessageSquareQuote, Search, X } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import Typewriter from 'svelte-typewriter';
@@ -14,11 +14,20 @@
 	import { suggestions } from '$lib/data/constants';
 	import { invalidateAll } from '$app/navigation';
 	import * as Table from '$lib/components/ui/table';
-	import { myStore, promptStore, userStore } from '$lib/stores/store.js';
+	import { myStore, promptStore, userStore, webhookDataStore } from '$lib/stores/store.js';
 	import { onMount, tick } from 'svelte';
 	import WebhookForm from '$lib/components/webhookForm.svelte';
 
 	export let data: any;
+
+	interface webhkData {
+		id: string;
+		created_at: string;
+		urlId: string;
+		prompText: string;
+		webflowSiteId: string;
+		user_email: string;
+	}
 
 	let webflow_acess_token: string;
 
@@ -36,13 +45,26 @@
 		webflow_acess_token = access_token;
 	});
 
-	onMount(() => {
+	onMount(async () => {
 		setInterval(() => {
 			suggestionTextIndex += 1;
 			if (suggestionTextIndex === suggestions.length) suggestionTextIndex = 0;
 
 			suggestionText = suggestions[suggestionTextIndex];
 		}, 1500);
+
+		fetch('/api/addWebhook?email=' + data.user.email, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then((res) => {
+				return res.json();
+			})
+			.then((data) => {
+				webhookDataStore.set({ webhook_data: data as webhkData[] });
+			});
 	});
 
 	const detectEnter = async (event: { key: string }) => {
@@ -132,7 +154,7 @@
 						</div>
 
 						<div>
-							<h3 class="my-2">Automations (0)</h3>
+							<h3 class="my-2">Automationsa (0)</h3>
 						</div>
 					</div>
 				</nav>
@@ -226,6 +248,7 @@
 					{#if ai_answer.type === 'webhook'}
 						<WebhookForm
 							{prompt}
+							user_email={data.user.email}
 							sites={data.sites}
 							on:removeCard={() => {
 								prompt = '';

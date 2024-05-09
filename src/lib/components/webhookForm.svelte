@@ -5,10 +5,13 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 
 	import { createEventDispatcher } from 'svelte';
+	export let user_email: string;
 	export let prompt: string;
 	export let sites: Array<any>;
 
 	const dispatch = createEventDispatcher();
+	let site_id = '';
+	let DeployState = 'Deploy';
 
 	const sitenames = sites.map((site) => {
 		return {
@@ -21,7 +24,21 @@
 		dispatch('removeCard', true);
 	};
 
-	const addReminder = () => {};
+	const addReminder = async () => {
+		DeployState = 'Deploying...';
+		const res = await fetch('/api/addWebhook', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ prompt, site_id, user_email })
+		});
+
+		const answer = (await res.json()) as { id: string };
+		if (answer.id) {
+			dispatch('removeCard', true);
+		}
+	};
 </script>
 
 <div class="flex gap-4">
@@ -41,8 +58,10 @@
 							</Select.Trigger>
 							<Select.Content>
 								{#each sitenames as sitename}
-									<Select.Item value={sitename.value} label={sitename.label}
-										>{sitename.label}</Select.Item
+									<Select.Item
+										value={sitename.value}
+										label={sitename.label}
+										on:click={() => (site_id = sitename.value)}>{sitename.label}</Select.Item
 									>
 								{/each}
 							</Select.Content>
@@ -53,7 +72,9 @@
 		</Card.Content>
 		<Card.Footer class="flex justify-between">
 			<Button variant="outline" on:click={removeCard}>Cancel</Button>
-			<Button on:click={addReminder}>Deploy</Button>
+			{#if site_id !== ''}
+				<Button on:click={addReminder}>{DeployState}</Button>
+			{/if}
 		</Card.Footer>
 	</Card.Root>
 

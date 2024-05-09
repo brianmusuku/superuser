@@ -7,8 +7,8 @@
 
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import { myStore, promptStore, userStore } from '$lib/stores/store';
-	import { MessageSquare, UserCog } from 'lucide-svelte';
+	import { myStore, promptStore, userStore, webhookDataStore } from '$lib/stores/store';
+	import { Clock, MessageSquare, UserCog } from 'lucide-svelte';
 	import { WEBFLOW_CLIENT_ID } from '$lib/data/credentials';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -19,6 +19,11 @@
 
 	const loginLink = `https://webflow.com/oauth/authorize?response_type=code&client_id=${WEBFLOW_CLIENT_ID}&scope=assets%3Aread%20assets%3Awrite%20authorized_user%3Aread%20cms%3Aread%20cms%3Awrite%20custom_code%3Aread%20custom_code%3Awrite%20forms%3Aread%20forms%3Awrite%20pages%3Aread%20pages%3Awrite%20sites%3Aread%20sites%3Awrite`;
 	let webflow_acess_token: string | undefined = undefined;
+
+	let webhookData = [] as any;
+	webhookDataStore.subscribe((value: any) => {
+		webhookData = value.webhook_data || [];
+	});
 
 	let prompt_history: string[] = [];
 	myStore.subscribe((value: any) => {
@@ -80,7 +85,19 @@
 						</div>
 
 						<div>
-							<h3 class="my-2">WatchList (0)</h3>
+							<h3 class="my-2">WatchList ({webhookData.length})</h3>
+							{#each webhookData as { prompText }}
+								<!-- svelte-ignore a11y-click-events-have-key-events -->
+								<!-- svelte-ignore a11y-no-static-element-interactions -->
+								<!-- svelte-ignore a11y-missing-attribute -->
+								<a
+									on:click={() => handleHistoryClick(prompText)}
+									class="flex cursor-pointer items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-muted hover:text-primary"
+								>
+									<Clock class="h-4 w-4" />
+									{prompText.slice(0, 20).trim()}...
+								</a>
+							{/each}
 						</div>
 					</div>
 				</nav>
