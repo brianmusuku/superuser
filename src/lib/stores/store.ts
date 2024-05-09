@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 const prompt_history: string[] = [];
 export const myStore = writable({ prompt_history });
 
-interface webhkData {
+interface webhookData {
 	id: string;
 	created_at: string;
 	urlId: string;
@@ -11,7 +11,7 @@ interface webhkData {
 	webflowSiteId: string;
 	user_email: string;
 }
-const webhook_data: webhkData[] = [];
+const webhook_data: webhookData[] = [];
 export const webhookDataStore = writable({ webhook_data });
 
 export const promptStore = writable({ currentPrompt: '' });
