@@ -5,6 +5,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 
 	import { createEventDispatcher } from 'svelte';
+	import { webhookDataStore } from '$lib/stores/store';
 	export let user_email: string;
 	export let prompt: string;
 	export let sites: Array<any>;
@@ -36,7 +37,19 @@
 
 		const answer = (await res.json()) as { id: string };
 		if (answer.id) {
-			dispatch('removeCard', true);
+			fetch('/api/addWebhook?email=' + user_email, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((res) => {
+					return res.json();
+				})
+				.then((data) => {
+					webhookDataStore.set({ webhook_data: data as any[] });
+					dispatch('removeCard', true);
+				});
 		}
 	};
 </script>
