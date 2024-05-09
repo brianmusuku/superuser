@@ -60,8 +60,8 @@
 			.then((res) => {
 				return res.json();
 			})
-			.then((data) => {
-				webhookDataStore.set({ webhook_data: data as webhkData[] });
+			.then((data: any) => {
+				if (!data.message) webhookDataStore.set({ webhook_data: data as webhkData[] });
 			});
 	});
 
@@ -176,7 +176,7 @@
 					stroke-width="2"
 					stroke-linecap="round"
 					stroke-linejoin="round"
-					class="lucide lucide-check-check stroke-muted-foreground"
+					class="lucide lucide-check-check stroke-blue-500"
 					><path d="M18 6 7 17l-5-5" /><path d="m22 10-7.5 7.5L13 16" /></svg
 				>
 				<div class="text-sm text-muted-foreground">
