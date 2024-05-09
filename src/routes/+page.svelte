@@ -82,7 +82,6 @@
 			});
 
 			ai_answer = await res.json();
-			console.log(ai_answer);
 
 			if (ai_answer.type !== 'webhook') {
 				prompt_history.push(prompt);
