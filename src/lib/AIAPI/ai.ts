@@ -242,7 +242,7 @@ export const getNaturalLangugageAnswer_ = async (
 		}
 		info += ' \n';
 	});
-	const prompt = `Use the supporting info below to answer the user question below. Be terse an correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
+	const prompt = `Use the supporting info below to answer the user question below. Be terse and correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
 	console.log(prompt);
 
 	const requestBody = {
