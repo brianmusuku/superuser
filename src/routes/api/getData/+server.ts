@@ -190,11 +190,7 @@ export async function POST({ request }: { request: Request }) {
 
 	addPromptToDB(prompt, email);
 
-	const choices = [
-		'question about a site',
-		'question about a page',
-		'instruction when something happens'
-	];
+	const choices = ['question about a site', 'question about a page', 'question about a form'];
 
 	const siteOrPagePredictions = await querySimilarity({
 		inputs: {
