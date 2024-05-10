@@ -222,13 +222,13 @@ export const getNaturalLangugageAnswer = async (
 };
 
 /**
- * Get natural language response given structured results.
+ * Get natural language response given structured results using groq.
  * @param user_question
  * @param info_results
  * @returns
  */
 
-export const getNaturalLangugageAnswer_ = async (
+export const getNaturalLangugageAnswerGroq = async (
 	user_question: string,
 	info_results: { [key: string]: string }[]
 ) => {

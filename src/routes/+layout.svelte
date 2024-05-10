@@ -7,8 +7,8 @@
 
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import { myStore, promptStore, userStore, webhookDataStore } from '$lib/stores/store';
-	import { CircleX, Clock, MessageSquare, UserCog } from 'lucide-svelte';
+	import { myStore, promptStore, userStore } from '$lib/stores/store';
+	import { MessageSquare, UserCog } from 'lucide-svelte';
 	import { WEBFLOW_CLIENT_ID } from '$lib/data/credentials';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -17,45 +17,8 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
-	let showX: boolean[] = [];
-
 	const loginLink = `https://webflow.com/oauth/authorize?response_type=code&client_id=${WEBFLOW_CLIENT_ID}&scope=assets%3Aread%20assets%3Awrite%20authorized_user%3Aread%20cms%3Aread%20cms%3Awrite%20custom_code%3Aread%20custom_code%3Awrite%20forms%3Aread%20forms%3Awrite%20pages%3Aread%20pages%3Awrite%20sites%3Aread%20sites%3Awrite`;
 	let webflow_acess_token: string | undefined = undefined;
-
-	let webhookData = [] as any;
-	webhookDataStore.subscribe((value: any) => {
-		webhookData = value.webhook_data || [];
-		showX = Array(webhookData.length).fill(false);
-	});
-
-	const deleteWebhook = async (id: string, user_email: string) => {
-		const data = {
-			id
-		};
-
-		const res = await fetch('/api/deleteWebhook', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		});
-
-		const d = await res.json();
-
-		fetch('/api/addWebhook?email=' + user_email, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then((res) => {
-				return res.json();
-			})
-			.then((data) => {
-				webhookDataStore.set({ webhook_data: data as any[] });
-			});
-	};
 
 	let prompt_history: string[] = [];
 	myStore.subscribe((value: any) => {
@@ -118,34 +81,6 @@
 											{prompt_text}
 										</p>
 									</div>
-								</a>
-							{/each}
-						</div>
-
-						<div>
-							<h3 class="my-2">WatchList ({webhookData.length})</h3>
-							{#each webhookData as { prompText, id, user_email }, index}
-								<!-- svelte-ignore a11y-click-events-have-key-events -->
-								<!-- svelte-ignore a11y-no-static-element-interactions -->
-								<!-- svelte-ignore a11y-missing-attribute -->
-								<a
-									on:mouseenter={() => (showX[index] = true)}
-									on:mouseleave={() => (showX[index] = false)}
-									class="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg py-2 pr-3 text-xs font-normal text-muted-foreground transition-all hover:bg-muted hover:text-primary"
-								>
-									<div
-										class="flex items-center gap-1"
-										on:click={() => handleHistoryClick(prompText)}
-									>
-										<Clock class="h-3 w-3" />
-										<p class="w-48 overflow-hidden text-ellipsis whitespace-nowrap">{prompText}</p>
-									</div>
-
-									{#if showX[index]}
-										<div on:click={() => deleteWebhook(id, user_email)}>
-											<CircleX class="h-4 w-4 hover:text-primary" />
-										</div>
-									{/if}
 								</a>
 							{/each}
 						</div>

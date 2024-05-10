@@ -11,22 +11,12 @@
 
 	import { suggestions } from '$lib/data/constants';
 	import { invalidateAll } from '$app/navigation';
-	import { myStore, promptStore, userStore, webhookDataStore } from '$lib/stores/store.js';
+	import { myStore, promptStore, userStore } from '$lib/stores/store.js';
 	import { onMount } from 'svelte';
-	import WebhookForm from '$lib/components/webhookForm.svelte';
 	import SingleAnsCard from '$lib/components/SingleAnsCard.svelte';
 	import MultipleAnsCard from '$lib/components/MultipleAnsCard.svelte';
 
 	export let data: any;
-
-	interface webhkData {
-		id: string;
-		created_at: string;
-		urlId: string;
-		prompText: string;
-		webflowSiteId: string;
-		user_email: string;
-	}
 
 	let webflow_acess_token: string;
 
@@ -49,20 +39,7 @@
 			if (suggestionTextIndex === suggestions.length) suggestionTextIndex = 0;
 
 			suggestionText = suggestions[suggestionTextIndex];
-		}, 1500);
-
-		fetch('/api/addWebhook?email=' + data.user.email, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then((res) => {
-				return res.json();
-			})
-			.then((data: any) => {
-				if (!data.message) webhookDataStore.set({ webhook_data: data as webhkData[] });
-			});
+		}, 1000);
 	});
 
 	const detectEnter = async (event: { key: string }) => {
@@ -99,7 +76,6 @@
 	promptStore.subscribe(async (value: any) => {
 		prompt = value.currentPrompt;
 		ai_answer = undefined;
-		// inputElement.focus();
 		//await detectEnter({ key: 'Enter' });
 	});
 
@@ -274,14 +250,7 @@
 				{/if}
 
 				{#if ai_answer && !isLoading && prompt !== ''}
-					{#if ai_answer.type === 'webhook'}
-						<WebhookForm
-							{prompt}
-							user_email={data.user.email}
-							sites={data.sites}
-							on:removeCard={reset}
-						/>
-					{:else if ai_answer.length === 1}
+					{#if ai_answer.length === 1}
 						<SingleAnsCard {ai_answer} on:reset={reset} />
 					{:else if ai_answer.info && ai_answer.info.length > 1}
 						<MultipleAnsCard {ai_answer} on:reset={reset} />
