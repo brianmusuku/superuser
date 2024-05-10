@@ -101,8 +101,8 @@
 		</div>
 		<div class="flex-1">
 			<nav class="grid items-start px-2 text-sm font-normal lg:px-4">
-				<div class="flex h-full flex-col justify-between">
-					<div>
+				<div class="flex flex-col justify-between">
+					<div class="h-[40rem] overflow-y-scroll">
 						<h3 class="my-2">Chat History ({prompt_history.length})</h3>
 						{#each prompt_history as prompt_text}
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -319,3 +319,15 @@
 		</div>
 	</main>
 </div>
+
+<style>
+	/* Hide scrollbars for WebKit-based browsers (Chrome, Safari, Opera) */
+	::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* Hide scrollbars for Internet Explorer and Edge */
+	* {
+		-ms-overflow-style: none;
+	}
+</style>
