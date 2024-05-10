@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table';
 
-	import { MessageSquareQuote, X } from 'lucide-svelte';
+	import { X } from 'lucide-svelte';
 	import Typewriter from 'svelte-typewriter';
 	import { userStore } from '$lib/stores/store';
 	import { createEventDispatcher } from 'svelte';
@@ -30,9 +30,8 @@
 		</div>
 	</div>
 	<div class="flex flex-col space-y-1.5 pb-6">
-		<h3 class="font-semibold leading-none tracking-tight">SuperUser AI</h3>
+		<h3 class="font-semibold leading-none tracking-tight">SuperUser</h3>
 		<div class="mt-4 flex items-center gap-1">
-			<MessageSquareQuote class="h-4 min-w-[4%] text-muted-foreground" />
 			<Typewriter class="min-w-[96%]"
 				><p class="text-left text-xs text-muted-foreground">
 					{ai_answer.response}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MessageSquareQuote, X } from 'lucide-svelte';
+	import { X } from 'lucide-svelte';
 	import Typewriter from 'svelte-typewriter';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { userStore } from '$lib/stores/store';
@@ -62,7 +62,6 @@
 	</div>
 	<div class="p-6 pt-0">
 		<div class="mt-2 flex items-center gap-0">
-			<MessageSquareQuote class="h-4 min-w-[4%] text-muted-foreground" />
 			<Typewriter class="min-w-[96%]">
 				<p class="text-left text-xs text-muted-foreground">{ai_answer[0][3]}</p>
 			</Typewriter>
