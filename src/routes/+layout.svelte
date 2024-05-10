@@ -5,10 +5,7 @@
 	import '@fontsource/inter/700.css'; // Import weight 700 (Bold)
 	import '../app.pcss';
 
-	import { Button } from '$lib/components/ui/button/index.js';
-	import * as Card from '$lib/components/ui/card/index.js';
-	import { myStore, promptStore, userStore } from '$lib/stores/store';
-	import { MessageSquare, UserCog } from 'lucide-svelte';
+	import { userStore } from '$lib/stores/store';
 	import { WEBFLOW_CLIENT_ID } from '$lib/data/credentials';
 	import Cookies from 'js-cookie';
 	import { onMount } from 'svelte';
@@ -19,15 +16,6 @@
 
 	const loginLink = `https://webflow.com/oauth/authorize?response_type=code&client_id=${WEBFLOW_CLIENT_ID}&scope=assets%3Aread%20assets%3Awrite%20authorized_user%3Aread%20cms%3Aread%20cms%3Awrite%20custom_code%3Aread%20custom_code%3Awrite%20forms%3Aread%20forms%3Awrite%20pages%3Aread%20pages%3Awrite%20sites%3Aread%20sites%3Awrite`;
 	let webflow_acess_token: string | undefined = undefined;
-
-	let prompt_history: string[] = [];
-	myStore.subscribe((value: any) => {
-		prompt_history = value.prompt_history;
-	});
-
-	let handleHistoryClick = (prompt: string) => {
-		promptStore.set({ currentPrompt: prompt });
-	};
 
 	onMount(() => {
 		let searchParams = $page.url.searchParams;
@@ -48,63 +36,6 @@
 </script>
 
 <div class="font-inter grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-	<div class="hidden border-r bg-muted/40 md:block">
-		<div class="flex h-full max-h-screen flex-col gap-2">
-			<div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-				<a href="/" class="flex items-center gap-2 font-semibold">
-					<UserCog class="h-5 w-5"></UserCog>
-					<span><span class="text-blue-500">Super</span>User</span>
-				</a>
-				<!-- <Button variant="outline" size="icon" class="ml-auto h-8 w-8">
-					<Save class="h-4 w-4" />
-					<span class="sr-only">Toggle notifications</span>
-				</Button> -->
-			</div>
-			<div class="flex-1">
-				<nav class="grid items-start px-2 text-sm font-normal lg:px-4">
-					<div class="flex h-full flex-col justify-between">
-						<div>
-							<h3 class="my-2">Chat History ({prompt_history.length})</h3>
-							{#each prompt_history as prompt_text}
-								<!-- svelte-ignore a11y-click-events-have-key-events -->
-								<!-- svelte-ignore a11y-no-static-element-interactions -->
-								<!-- svelte-ignore a11y-missing-attribute -->
-								<a
-									class="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg py-2 pr-3 text-xs font-normal text-muted-foreground transition-all hover:bg-muted hover:text-primary"
-								>
-									<div
-										class="flex items-center gap-1"
-										on:click={() => handleHistoryClick(prompt_text)}
-									>
-										<MessageSquare class="h-3 w-3" />
-										<p class="w-48 overflow-hidden text-ellipsis whitespace-nowrap">
-											{prompt_text}
-										</p>
-									</div>
-								</a>
-							{/each}
-						</div>
-					</div>
-				</nav>
-			</div>
-			<div class="mt-auto p-4">
-				<Card.Root>
-					<Card.Header class="p-2 pt-0 md:p-4">
-						<Card.Title>Enable Form &amp; CMS AI</Card.Title>
-						<Card.Description
-							>Contact <a href="https://x.com/autoinvent" target="_blank">@autoinvent</a> to integrate
-							your webflow form submissions data &amp; CMS with AI.</Card.Description
-						>
-					</Card.Header>
-					<Card.Content class="p-2 pt-0 md:p-4 md:pt-0">
-						<a href="https://x.com/autoinvent" target="_blank"
-							><Button size="sm" class="w-full bg-blue-500">Contact</Button></a
-						>
-					</Card.Content>
-				</Card.Root>
-			</div>
-		</div>
-	</div>
 	<slot />
 </div>
 

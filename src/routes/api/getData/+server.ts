@@ -15,6 +15,7 @@ import {
 } from '$lib/AIAPI/ai';
 
 import { json } from '@sveltejs/kit';
+import { addPromptToDB } from '$lib/AIAPI/db';
 
 const getPageInfo = async (prompt: string, site_id: string, webflow_acess_token: string) => {
 	const pageapi_descriptions = Object.values(PAGE_API_DESCRIPTIONS);
@@ -182,8 +183,12 @@ export async function POST({ request }: { request: Request }) {
 	const {
 		prompt,
 		site_id,
+		email,
 		webflow_acess_token
-	}: { prompt: string; site_id: string; webflow_acess_token: string } = await request.json();
+	}: { prompt: string; site_id: string; webflow_acess_token: string; email: string } =
+		await request.json();
+
+	addPromptToDB(prompt, email);
 
 	const choices = [
 		'question about a site',

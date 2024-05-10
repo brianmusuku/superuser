@@ -1,5 +1,6 @@
 import { GROQ_KEY } from '$lib/data/credentials';
 import { getReadableDateTime } from '$lib/utils/timeutils';
+import { getWeflowPages, getWeflowSites } from './webflow';
 
 const ANTHROPIC_API_KEY =
 	'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';
@@ -38,25 +39,6 @@ export const querySimilarity = async (data: {
 };
 
 /**
- * return all webflow sites
- * @returns
- */
-export const getWeflowSites = async (webflow_token: string) => {
-	const url = 'https://api.webflow.com/beta/sites';
-	const options = {
-		method: 'GET',
-		headers: {
-			accept: 'application/json',
-			authorization: 'Bearer ' + webflow_token
-		}
-	};
-
-	const resp = await fetch(url, options);
-	const data = await resp.json();
-	return data;
-};
-
-/**
  * Get data from any sites mentioned in the prompt.
  * @param prompt
  * @returns
@@ -72,25 +54,6 @@ export const getSitesInPrompt = async (prompt: string, webflow_token: string) =>
 	});
 
 	return foundSites.length > 0 ? foundSites : sites;
-};
-
-/**
- * get all webflow page names
- * @returns
- */
-export const getWeflowPages = async (site_id: string, webflow_token: string) => {
-	const url = `https://api.webflow.com/beta/sites/${site_id}/pages`;
-	const options = {
-		method: 'GET',
-		headers: {
-			accept: 'application/json',
-			authorization: 'Bearer ' + webflow_token
-		}
-	};
-
-	const resp = await fetch(url, options);
-	const data = await resp.json();
-	return data;
 };
 
 /**
@@ -132,46 +95,6 @@ export const getCollectionInPrompt = async (
 			);
 		}
 	);
-};
-
-/**
- * Get user info
- * @returns
- */
-
-export const getEmail = async (webflow_token: string) => {
-	const url = 'https://api.webflow.com/v2/token/authorized_by';
-	const options = {
-		method: 'GET',
-		headers: {
-			accept: 'application/json',
-			authorization: 'Bearer ' + webflow_token
-		}
-	};
-
-	const resp = await fetch(url, options);
-
-	return resp.json();
-};
-
-/**
- * Create a webhook for forms
- */
-
-export const createWebhook = async (siteId: string, webflow_token: string) => {
-	const endpoint = `https://api.webflow.com/v2/sites/${siteId}/webhooks`;
-	const resp = await fetch(endpoint, {
-		method: 'POST',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-			authorization: 'Bearer ' + webflow_token
-		},
-		body: JSON.stringify({
-			triggerType: 'form_submission'
-		})
-	});
-	return resp.json();
 };
 
 /**

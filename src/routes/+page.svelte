@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Loader, MessageSquare, Search } from 'lucide-svelte';
+	import { Loader, MessageSquare, Search, UserCog } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import CircleUser from 'lucide-svelte/icons/circle-user';
@@ -11,7 +11,7 @@
 
 	import { suggestions } from '$lib/data/constants';
 	import { invalidateAll } from '$app/navigation';
-	import { myStore, promptStore, userStore } from '$lib/stores/store.js';
+	import { userStore } from '$lib/stores/store.js';
 	import { onMount } from 'svelte';
 	import SingleAnsCard from '$lib/components/SingleAnsCard.svelte';
 	import MultipleAnsCard from '$lib/components/MultipleAnsCard.svelte';
@@ -20,8 +20,9 @@
 
 	let webflow_acess_token: string;
 
-	let prompt = '';
-	let prompt_history: string[] = [];
+	let currentPrompt = '';
+	$: prompt_history = data.prompts;
+
 	let ai_answer: any;
 	let isLoading = false;
 
@@ -45,19 +46,25 @@
 	const detectEnter = async (event: { key: string }) => {
 		if (event.key === 'Enter' || event.key === 'Tab') {
 			if (event.key === 'Tab') {
-				prompt = suggestionText;
+				currentPrompt = suggestionText;
 			}
 
+			const email = data.user.email;
+
 			isLoading = true;
-			prompt_history.push(prompt);
-			myStore.set({ prompt_history });
+			prompt_history.push(currentPrompt);
 
 			const res = await fetch('/api/getData', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ webflow_acess_token, prompt, site_id: currentSiteId })
+				body: JSON.stringify({
+					webflow_acess_token,
+					prompt: currentPrompt,
+					email,
+					site_id: currentSiteId
+				})
 			});
 
 			ai_answer = await res.json();
@@ -70,18 +77,73 @@
 		}
 	};
 
-	promptStore.subscribe(async (value: any) => {
-		prompt = value.currentPrompt;
-		ai_answer = undefined;
-		//await detectEnter({ key: 'Enter' });
-	});
-
 	const reset = () => {
-		prompt = '';
+		currentPrompt = '';
 		ai_answer = undefined;
+	};
+
+	let handleHistoryClick = (prompt: string) => {
+		currentPrompt = prompt;
 	};
 </script>
 
+<div class="hidden border-r bg-muted/40 md:block">
+	<div class="flex h-full max-h-screen flex-col gap-2">
+		<div class="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+			<a href="/" class="flex items-center gap-2 font-semibold">
+				<UserCog class="h-5 w-5"></UserCog>
+				<span><span class="text-blue-500">Super</span>User</span>
+			</a>
+			<!-- <Button variant="outline" size="icon" class="ml-auto h-8 w-8">
+				<Save class="h-4 w-4" />
+				<span class="sr-only">Toggle notifications</span>
+			</Button> -->
+		</div>
+		<div class="flex-1">
+			<nav class="grid items-start px-2 text-sm font-normal lg:px-4">
+				<div class="flex h-full flex-col justify-between">
+					<div>
+						<h3 class="my-2">Chat History ({prompt_history.length})</h3>
+						{#each prompt_history as prompt_text}
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y-no-static-element-interactions -->
+							<!-- svelte-ignore a11y-missing-attribute -->
+							<a
+								class="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg py-2 pr-3 text-xs font-normal text-muted-foreground transition-all hover:bg-muted hover:text-primary"
+							>
+								<div
+									class="flex items-center gap-1"
+									on:click={() => handleHistoryClick(prompt_text)}
+								>
+									<MessageSquare class="h-3 w-3" />
+									<p class="w-48 overflow-hidden text-ellipsis whitespace-nowrap">
+										{prompt_text}
+									</p>
+								</div>
+							</a>
+						{/each}
+					</div>
+				</div>
+			</nav>
+		</div>
+		<div class="mt-auto p-4">
+			<Card.Root>
+				<Card.Header class="p-2 pt-0 md:p-4">
+					<Card.Title>Enable Form &amp; CMS AI</Card.Title>
+					<Card.Description
+						>Contact <a href="https://x.com/autoinvent" target="_blank">@autoinvent</a> to integrate
+						your webflow form submissions data &amp; CMS with AI.</Card.Description
+					>
+				</Card.Header>
+				<Card.Content class="p-2 pt-0 md:p-4 md:pt-0">
+					<a href="https://x.com/autoinvent" target="_blank"
+						><Button size="sm" class="w-full bg-blue-500">Contact</Button></a
+					>
+				</Card.Content>
+			</Card.Root>
+		</div>
+	</div>
+</div>
 <div class="flex flex-col">
 	<header
 		class="flex h-14 items-center justify-between border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6"
@@ -220,7 +282,7 @@
 			<div class="mb-20 flex h-full w-full flex-col items-center justify-center gap-4">
 				<div class="flex w-full flex-col items-center justify-center gap-6 rounded-lg">
 					<div class="flex flex-col items-center gap-1 text-center">
-						{#if prompt === ''}
+						{#if currentPrompt === ''}
 							<h3 class="text-2xl font-bold tracking-tight">How can I help you today?</h3>
 
 							<p class="text-sm text-muted-foreground">
@@ -233,7 +295,7 @@
 						<Search class="absolute left-2.5 top-4 h-4 w-4 text-muted-foreground" />
 						<Input
 							type="search"
-							bind:value={prompt}
+							bind:value={currentPrompt}
 							on:input={() => (ai_answer = undefined)}
 							on:keydown={detectEnter}
 							placeholder={suggestionText}
@@ -246,7 +308,7 @@
 					<Loader class="mt-12 h-8 w-8 text-muted-foreground" />
 				{/if}
 
-				{#if ai_answer && !isLoading && prompt !== ''}
+				{#if ai_answer && !isLoading && currentPrompt !== ''}
 					{#if ai_answer.length === 1}
 						<SingleAnsCard {ai_answer} on:reset={reset} />
 					{:else if ai_answer.info && ai_answer.info.length > 1}
