@@ -118,7 +118,7 @@ export const getNaturalLangugageAnswer = async (
 		}
 		info += ' \n';
 	});
-	const prompt = `Use the supporting info below to answer the user question below. Be terse an correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
+	const prompt = `Use the supporting info below to answer the user question below. Be terse and correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
 	console.log(prompt);
 
 	const requestBody = {
@@ -153,13 +153,13 @@ export const getNaturalLangugageAnswer = async (
 
 export const getNaturalLangugageAnswerForms = async (
 	user_question: string,
-	info_results: string
+	form_results: string
 ) => {
 	const currentDate = new Date();
 	const dateString = "Today's date is " + getReadableDateTime(currentDate.toString());
-	const info = `${dateString}.\n${info_results}`;
+	const info = `${dateString}.\n${form_results}`;
 
-	const prompt = `Use the form data to answer the user question below. Be terse an correct. \n\nUser Question:\n${user_question}\n\n Form Data:\n${info}`;
+	const prompt = `Use the form data to answer the user question below. \n\nUser Question:\n${user_question}\n\n Form Data:\n${info}`;
 	console.log(prompt);
 
 	const requestBody = {
