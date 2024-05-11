@@ -301,7 +301,7 @@
 							<h3 class="text-2xl font-bold tracking-tight">How can I help you today?</h3>
 
 							<p class="text-sm text-muted-foreground">
-								Ask for info about your webflow sites and pages.
+								Ask for info about your webflow sites, forms and pages.
 							</p>
 						{/if}
 					</div>
