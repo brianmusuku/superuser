@@ -327,7 +327,7 @@
 					{#if ai_answer.length === 1}
 						<SingleAnsCard {ai_answer} on:reset={reset} />
 					{:else if ai_answer.type === 'form'}
-						<FormAnsCard {ai_answer} prompt={currentPrompt} on:reset={reset} />
+						<FormAnsCard {ai_answer} on:reset={reset} />
 					{:else if ai_answer.info && ai_answer.info.length > 1}
 						<MultipleAnsCard {ai_answer} on:reset={reset} />
 					{/if}
