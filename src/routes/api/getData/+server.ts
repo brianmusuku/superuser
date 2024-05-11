@@ -16,6 +16,7 @@ import {
 
 import { json } from '@sveltejs/kit';
 import { addPromptToDB } from '$lib/AIAPI/db';
+import { getFormNameAndIds } from '$lib/AIAPI/webflow';
 
 const getPageInfo = async (prompt: string, site_id: string, webflow_acess_token: string) => {
 	const pageapi_descriptions = Object.values(PAGE_API_DESCRIPTIONS);
@@ -174,9 +175,9 @@ const getSiteInfo = async (prompt: string, webflow_acess_token: string) => {
 };
 
 const getInstructionInfo = async (prompt: string, webflow_access_token: string) => {
-	const data = { prompt, webflow_access_token };
-	data.prompt;
-	return json({ type: 'webhook' });
+	const forms = await getFormNameAndIds(webflow_access_token);
+
+	return json({ type: 'form', info: forms });
 };
 
 export async function POST({ request }: { request: Request }) {
@@ -188,9 +189,11 @@ export async function POST({ request }: { request: Request }) {
 	}: { prompt: string; site_id: string; webflow_acess_token: string; email: string } =
 		await request.json();
 
-	addPromptToDB(prompt, email);
-
-	const choices = ['question about a site', 'question about a page', 'question about a form'];
+	const choices = [
+		'question about site info',
+		'question about a page',
+		'question about a user, submission'
+	];
 
 	const siteOrPagePredictions = await querySimilarity({
 		inputs: {
@@ -202,7 +205,19 @@ export async function POST({ request }: { request: Request }) {
 	const sortedPredictions: string[] = sortStringsByFloats(choices, siteOrPagePredictions);
 	const chosenTopic = sortedPredictions[0];
 
+	let oneWordPrediction = '';
+	if (chosenTopic.includes('page')) {
+		oneWordPrediction = 'page';
+	}
+	if (chosenTopic.includes('site')) {
+		oneWordPrediction = 'site';
+	}
+	if (chosenTopic.includes('user')) {
+		oneWordPrediction = 'user';
+	}
+	addPromptToDB(prompt, email, oneWordPrediction);
+
 	if (chosenTopic.includes('page')) return getPageInfo(prompt, site_id, webflow_acess_token);
 	if (chosenTopic.includes('site')) return getSiteInfo(prompt, webflow_acess_token);
-	if (chosenTopic.includes('instruction')) return getInstructionInfo(prompt, webflow_acess_token);
+	if (chosenTopic.includes('user')) return getInstructionInfo(prompt, webflow_acess_token);
 }

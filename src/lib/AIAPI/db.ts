@@ -1,6 +1,6 @@
 const DB_ENDPOINT = `https://x8ki-letl-twmt.n7.xano.io/api:pQj0cpV4/superuser_prompts`;
 
-export const addPromptToDB = async (prompt_text: string, email: string) => {
+export const addPromptToDB = async (prompt_text: string, email: string, predictedTopic: string) => {
 	await fetch(DB_ENDPOINT, {
 		method: 'POST',
 		headers: {
@@ -8,7 +8,8 @@ export const addPromptToDB = async (prompt_text: string, email: string) => {
 		},
 		body: JSON.stringify({
 			prompt_text,
-			email
+			email,
+			predictedTopic
 		})
 	});
 };

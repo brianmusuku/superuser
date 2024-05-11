@@ -1,5 +1,15 @@
 <script lang="ts">
-	import { Loader, MessageSquare, Search, UserCog } from 'lucide-svelte';
+	import {
+		Building,
+		Database,
+		Earth,
+		Loader,
+		MessageSquare,
+		Search,
+		StickyNote,
+		UserCog,
+		Warehouse
+	} from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import CircleUser from 'lucide-svelte/icons/circle-user';
@@ -15,6 +25,8 @@
 	import { onMount } from 'svelte';
 	import SingleAnsCard from '$lib/components/SingleAnsCard.svelte';
 	import MultipleAnsCard from '$lib/components/MultipleAnsCard.svelte';
+	import { Home } from 'svelte-radix';
+	import FormAnsCard from '$lib/components/FormAnsCard.svelte';
 
 	export let data: any;
 
@@ -40,7 +52,7 @@
 			if (suggestionTextIndex === suggestions.length) suggestionTextIndex = 0;
 
 			suggestionText = suggestions[suggestionTextIndex];
-		}, 1000);
+		}, 1500);
 	});
 
 	const detectEnter = async (event: { key: string }) => {
@@ -104,20 +116,23 @@
 				<div class="flex flex-col justify-between">
 					<div class="h-[40rem] overflow-y-scroll">
 						<h3 class="my-2">Chat History ({prompt_history.length})</h3>
-						{#each prompt_history as prompt_text}
+						{#each prompt_history as { text, topic }}
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
 							<!-- svelte-ignore a11y-missing-attribute -->
 							<a
 								class="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg py-2 pr-3 text-xs font-normal text-muted-foreground transition-all hover:bg-muted hover:text-primary"
 							>
-								<div
-									class="flex items-center gap-1"
-									on:click={() => handleHistoryClick(prompt_text)}
-								>
-									<MessageSquare class="h-3 w-3" />
+								<div class="flex items-center gap-1" on:click={() => handleHistoryClick(text)}>
+									{#if topic === 'site'}
+										<Home class="h-3 w-3" />
+									{:else if topic === 'page'}
+										<StickyNote class="h-3 w-3" />
+									{:else if topic === 'user'}
+										<Database class="h-3 w-3" />
+									{/if}
 									<p class="w-48 overflow-hidden text-ellipsis whitespace-nowrap">
-										{prompt_text}
+										{text}
 									</p>
 								</div>
 							</a>
@@ -172,7 +187,7 @@
 									class="flex cursor-pointer items-center gap-3 whitespace-nowrap rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
 								>
 									<MessageSquare class="h-4 w-4"></MessageSquare>
-									{prompt.slice(0, 27).trim()}...
+									{prompt.text}
 								</a>
 							{/each}
 						</div>
@@ -311,6 +326,8 @@
 				{#if ai_answer && !isLoading && currentPrompt !== ''}
 					{#if ai_answer.length === 1}
 						<SingleAnsCard {ai_answer} on:reset={reset} />
+					{:else if ai_answer.type === 'form'}
+						<FormAnsCard {ai_answer} prompt={currentPrompt} on:reset={reset} />
 					{:else if ai_answer.info && ai_answer.info.length > 1}
 						<MultipleAnsCard {ai_answer} on:reset={reset} />
 					{/if}

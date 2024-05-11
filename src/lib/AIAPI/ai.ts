@@ -145,6 +145,47 @@ export const getNaturalLangugageAnswer = async (
 };
 
 /**
+ * Get natural language response given form results.
+ * @param user_question
+ * @param info_results
+ * @returns
+ */
+
+export const getNaturalLangugageAnswerForms = async (
+	user_question: string,
+	info_results: string
+) => {
+	const currentDate = new Date();
+	const dateString = "Today's date is " + getReadableDateTime(currentDate.toString());
+	const info = `${dateString}.\n${info_results}`;
+
+	const prompt = `Use the form data to answer the user question below. Be terse an correct. \n\nUser Question:\n${user_question}\n\n Form Data:\n${info}`;
+	console.log(prompt);
+
+	const requestBody = {
+		model: 'claude-3-haiku-20240307', //'claude-3-sonnet-20240229',
+		max_tokens: 1024,
+		temperature: 0.0,
+		messages: [{ role: 'user', content: prompt }]
+	};
+
+	const requestOptions = {
+		method: 'POST',
+		headers: {
+			'x-api-key': ANTHROPIC_API_KEY,
+			'anthropic-version': '2023-06-01',
+			'content-type': 'application/json'
+		},
+		body: JSON.stringify(requestBody)
+	};
+
+	const res = await fetch('https://api.anthropic.com/v1/messages', requestOptions);
+	const { content }: { content: { text: string }[] } = await res.json();
+	if (content) return content[0].text;
+	return '';
+};
+
+/**
  * Get natural language response given structured results using groq.
  * @param user_question
  * @param info_results

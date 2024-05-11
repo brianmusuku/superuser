@@ -11,6 +11,7 @@ interface data {
 interface Prompt {
 	prompt_text: string;
 	created_at: number;
+	predictedTopic: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -23,7 +24,9 @@ export const load = async ({ params, cookies }) => {
 
 		let promptData = (await getUserPrompts(user_data.email)) as Prompt[];
 		promptData = promptData.sort((a, b) => b.created_at - a.created_at);
-		const prompts = promptData.map((prompt) => prompt.prompt_text);
+		const prompts = promptData.map((prompt) => {
+			return { text: prompt.prompt_text, topic: prompt.predictedTopic };
+		});
 
 		if (data) return { sites: data.sites, user: user_data, prompts };
 	}
