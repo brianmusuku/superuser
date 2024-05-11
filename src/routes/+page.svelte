@@ -114,7 +114,7 @@
 		<div class="flex-1">
 			<nav class="grid items-start px-2 text-sm font-normal lg:px-4">
 				<div class="flex flex-col justify-between">
-					<div class="h-[40rem] overflow-y-scroll">
+					<div class="max-h-[40rem] overflow-y-scroll">
 						<h3 class="my-2">Chat History ({prompt_history.length})</h3>
 						{#each prompt_history as { text, topic }}
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
