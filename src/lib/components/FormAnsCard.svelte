@@ -12,7 +12,7 @@
 
 	const forms = ai_answer.info;
 	let currentFormId = '';
-	let searchResult: string;
+	let searchResult: string = ai_answer.answer;
 
 	const dispatch = createEventDispatcher();
 	let searchState = 'Get Answer';

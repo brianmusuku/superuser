@@ -159,9 +159,28 @@ export const getFormNameAndIds = async (webflow_token: string) => {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	siteWithForms.forEach((swf: any, index: number) => {
 		swf.numSubmissions = submissionData[index].formSubmissions.length;
+
+		// get submissions as sentences
+		const sentences: string[] = [];
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		submissionData[index].formSubmissions.forEach(({ formResponse }: any) => {
+			let sentence = '';
+			for (const key in formResponse) {
+				if (Object.prototype.hasOwnProperty.call(formResponse, key)) {
+					const value = formResponse[key];
+					sentence += `${key}: ${value}, `;
+				}
+			}
+
+			sentences.push(sentence.toLowerCase());
+		});
+
+		swf.sentences = sentences;
 	});
 
-	return siteWithForms;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	return siteWithForms.filter((swf: any) => swf.numSubmissions > 0);
 };
 
 /**

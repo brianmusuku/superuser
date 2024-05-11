@@ -9,6 +9,7 @@ import { evalTimePeriod, getReadableDateTime, sortStringsByFloats } from '$lib/u
 import {
 	getCollectionInPrompt,
 	getNaturalLangugageAnswer,
+	getNaturalLangugageAnswerForms,
 	getPagesInPrompt,
 	getSitesInPrompt,
 	querySimilarity
@@ -174,10 +175,28 @@ const getSiteInfo = async (prompt: string, webflow_acess_token: string) => {
 	return json({ info: mappedSite, response: llm_response });
 };
 
-const getInstructionInfo = async (prompt: string, webflow_access_token: string) => {
-	const forms = await getFormNameAndIds(webflow_access_token);
+const getFormInfo = async (prompt: string, webflow_access_token: string) => {
+	const formsDataPerSite = await getFormNameAndIds(webflow_access_token);
 
-	return json({ type: 'form', info: forms });
+	const choices = formsDataPerSite.flatMap((data: { sentences: string[] }) => data.sentences);
+
+	const submissionPredictions = await querySimilarity({
+		inputs: {
+			source_sentence: prompt.toLowerCase(),
+			sentences: choices
+		}
+	});
+
+	const sortedPredictions: string[] = sortStringsByFloats(choices, submissionPredictions);
+	const mostSimilarSubmissions = sortedPredictions.slice(0, 2);
+	console.log(submissionPredictions);
+
+	const llm_response = await getNaturalLangugageAnswerForms(
+		prompt,
+		mostSimilarSubmissions.join('\n')
+	);
+
+	return json({ type: 'form', answer: llm_response });
 };
 
 export async function POST({ request }: { request: Request }) {
@@ -219,5 +238,5 @@ export async function POST({ request }: { request: Request }) {
 
 	if (chosenTopic.includes('page')) return getPageInfo(prompt, site_id, webflow_acess_token);
 	if (chosenTopic.includes('site')) return getSiteInfo(prompt, webflow_acess_token);
-	if (chosenTopic.includes('user')) return getInstructionInfo(prompt, webflow_acess_token);
+	if (chosenTopic.includes('user')) return getFormInfo(prompt, webflow_acess_token);
 }
