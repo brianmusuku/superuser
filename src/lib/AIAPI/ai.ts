@@ -119,7 +119,7 @@ export const getNaturalLangugageAnswer = async (
 		info += ' \n';
 	});
 	const prompt = `Use the supporting info below to answer the user question below. Be terse and correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
-	console.log(prompt);
+	// console.log(prompt);
 
 	const requestBody = {
 		model: 'claude-3-haiku-20240307', //'claude-3-sonnet-20240229',
@@ -159,8 +159,8 @@ export const getNaturalLangugageAnswerForms = async (
 	const dateString = "Today's date is " + getReadableDateTime(currentDate.toString());
 	const info = `${dateString}.\n${form_results}`;
 
-	const prompt = `Use the form data to answer the user question below. \n\nUser Question:\n${user_question}\n\n Form Data:\n${info}`;
-	console.log(prompt);
+	const prompt = `Use the form data to answer the user question below. \n\nUser Question:\n${user_question}\n\nForm Data:\n${info}`;
+	// console.log(prompt);
 
 	const requestBody = {
 		model: 'claude-3-haiku-20240307', //'claude-3-sonnet-20240229',
@@ -207,7 +207,7 @@ export const getNaturalLangugageAnswerGroq = async (
 		info += ' \n';
 	});
 	const prompt = `Use the supporting info below to answer the user question below. Be terse and correct. \n\nUser Question:\n${user_question}\n\nSupporting Info:\n${info}`;
-	console.log(prompt);
+	// console.log(prompt);
 
 	const requestBody = {
 		model: 'llama3-8b-8192',
