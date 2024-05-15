@@ -188,8 +188,8 @@ const getFormInfo = async (prompt: string, webflow_access_token: string) => {
 	});
 
 	const sortedPredictions: string[] = sortStringsByFloats(choices, submissionPredictions);
-	const mostSimilarSubmissions = sortedPredictions.slice(0, 2);
-	console.log(submissionPredictions);
+	const mostSimilarSubmissions = sortedPredictions.slice(0, 100);
+	//console.log(submissionPredictions);
 
 	const llm_response = await getNaturalLangugageAnswerForms(
 		prompt,
