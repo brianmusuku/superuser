@@ -1,15 +1,5 @@
 <script lang="ts">
-	import {
-		Building,
-		Database,
-		Earth,
-		Loader,
-		MessageSquare,
-		Search,
-		StickyNote,
-		UserCog,
-		Warehouse
-	} from 'lucide-svelte';
+	import { Database, Loader, MessageSquare, Search, StickyNote, UserCog } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import CircleUser from 'lucide-svelte/icons/circle-user';
@@ -33,7 +23,7 @@
 	let webflow_acess_token: string;
 
 	let currentPrompt = '';
-	$: prompt_history = data.prompts;
+	$: prompt_history = data.prompts || [];
 
 	let ai_answer: any;
 	let isLoading = false;

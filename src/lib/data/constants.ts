@@ -98,7 +98,9 @@ export const suggestions: string[] = [
 	'Are the new updates on shadcn online?',
 	'List all pages in the shadcn website.',
 	'List all pages in the events collection',
-	'how many pages are collection pages in shadcn'
+	'how many pages are collection pages in shadcn',
+	'has anyone submitted a form?',
+	'when was the last form submission'
 ];
 
 export const DOMAIN = `https://superuser-422.pages.dev`;
